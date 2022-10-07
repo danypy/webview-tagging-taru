@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -189,6 +188,7 @@ class WebViewState extends State<HomePage> {
     android: AndroidInAppWebViewOptions(
       useHybridComposition: true,
       mixedContentMode: AndroidMixedContentMode.MIXED_CONTENT_ALWAYS_ALLOW,
+      geolocationEnabled: true,
     ),
     ios: IOSInAppWebViewOptions(
       allowsInlineMediaPlayback: true,
@@ -240,6 +240,14 @@ class WebViewState extends State<HomePage> {
               onReceivedServerTrustAuthRequest: (controller, challenge) async {
                 return ServerTrustAuthResponse(
                     action: ServerTrustAuthResponseAction.PROCEED);
+              },
+              androidOnGeolocationPermissionsShowPrompt:
+                  (InAppWebViewController controller, String origin) async {
+                return GeolocationPermissionShowPromptResponse(
+                  origin: origin,
+                  allow: true,
+                  retain: true,
+                );
               },
               onProgressChanged: (controller, progress) {
                 if (progress == 100) {
